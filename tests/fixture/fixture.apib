@@ -1,0 +1,47 @@
+FORMAT: 1A
+HOST: http://outline.app/
+
+# Outline
+
+Outline is a simple package to covert api blueprint format docs into acceptance/feature tests.
+
+# Status Resource [/status]
+
+## Fetching credits available [GET /status/credits]
+
+Returns the available credits and does the action of stating whether there is action required of
+buying new credits if the threshold is below a certain point.
+
++ Request
+
+    + Headers
+
+            X-Auth-Token: <ADMIN_API_KEY>
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "message": "Credits available",
+            "data": {
+                "credits_available": 12345
+            }
+        }
+
++ Response 402 (application/json)
+
+        {
+            "status": 402,
+            "message": "No credits available or below specified threshold",
+            "data": {
+                "credits_available": 500,
+                "min_threshold": 1000
+            }
+        }
+
++ Response 401 (application/json)
+
+        {
+            "status": 401,
+            "message": "Invalid API Key"
+        }

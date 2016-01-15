@@ -1,0 +1,45 @@
+{
+    "name": "etiennemarais/outline",
+    "description": "Parse and generate API Blueprint markdown into Feature/Acceptance tests.",
+    "keywords": ["api", "blueprint", "tdd"],
+    "authors": [
+        {
+            "name": "Etienne Marais",
+            "email": "hello@etiennemarais.co.za",
+            "role": "Developer"
+        }
+    ],
+    "license": "MIT",
+    "type": "project",
+    "require": {
+        "php": "5.6.*",
+        "hmaus/drafter-php": "2.*",
+        "flow/jsonpath": "0.3.*"
+    },
+    "require-dev": {
+        "fzaninotto/faker": "~1.4",
+        "mockery/mockery": "0.9.*",
+        "phpunit/phpunit": "~4.0",
+        "phpspec/phpspec": "~2.1",
+        "illuminate/support": "5.2.*",
+        "symfony/var-dumper": "2.7.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Outline\\": "src/Outline"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "if ! [[ -d ext/drafter ]]; then echo \"### Installing drafter to ./ext; drafter bin to ./vendor/bin/ ###\"; fi",
+            "if ! [[ -d ext/drafter ]]; then git clone --recursive https://github.com/apiaryio/drafter.git ext/drafter; fi",
+            "if ! [[ -d vendor/bin ]]; then mkdir -p vendor/bin; fi",
+            "if ! [[ -f vendor/bin/drafter ]]; then cd ext/drafter && ./configure && make drafter; fi",
+            "if ! [[ -f vendor/bin/drafter ]]; then cd vendor/bin && ln -s ../../ext/drafter/bin/drafter drafter; fi"
+        ]
+    },
+    "config": {
+        "preferred-install": "dist"
+    },
+    "minimum-stability": "stable"
+}
