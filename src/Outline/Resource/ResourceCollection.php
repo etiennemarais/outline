@@ -53,7 +53,7 @@ class ResourceCollection implements ResourceCollectionContract
         $this->resources = [];
         if (isset($this->originalParsedData['ast']['resourceGroups'])) {
             foreach ($this->originalParsedData['ast']['resourceGroups'] as $resources) {
-                foreach ($resources as $resource) {
+                foreach ($resources['resources'] as $index => $resource) {
                     $this->resources[] = new Resource($resource);
                 }
             }
