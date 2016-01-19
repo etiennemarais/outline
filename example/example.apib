@@ -1,11 +1,8 @@
-FORMAT: 1A
-HOST: http://outline.app/
-
 # Outline
 
 Outline is a simple package to covert api blueprint format docs into acceptance/feature tests.
 
-# Status Resource [/status]
+# Status [/status]
 
 ## Fetching credits available [GET /status/credits]
 
@@ -44,4 +41,21 @@ buying new credits if the threshold is below a certain point.
         {
             "status": 401,
             "message": "Invalid API Key"
+        }
+
+## Health checking system [GET /status/check]
+
+Does sanity and up-time health checks on the system and returns whether there were any problems.
+
++ Request
+
+    + Headers
+
+            X-Auth-Token: <ADMIN_API_KEY>
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "message": "System healthy"
         }

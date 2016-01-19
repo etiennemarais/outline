@@ -2,6 +2,7 @@
 namespace Outline\ApiBlueprint;
 
 use DrafterPhp\Drafter;
+use Outline\Contracts\ApiBlueprint as ApiBlueprintContract;
 
 class ApiBlueprint implements ApiBlueprintContract
 {
@@ -19,10 +20,12 @@ class ApiBlueprint implements ApiBlueprintContract
      * @param Drafter $drafter
      * @param $input
      * @param string $format
+     * @param string $type
      */
-    public function __construct(Drafter $drafter, $input, $format = 'json')
+    public function __construct(Drafter $drafter, $input, $format = 'json', $type = 'ast')
     {
         $process = $drafter->input($input)
+            ->type($type)
             ->format($format)
             ->build();
 
@@ -34,8 +37,8 @@ class ApiBlueprint implements ApiBlueprintContract
      * @return string
      * @throws \Exception
      */
-    public function getJson()
+    public function getData()
     {
-        return $this->drafter->run($this->process);
+        return json_decode($this->drafter->run($this->process), true);
     }
 }

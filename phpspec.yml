@@ -1,0 +1,6 @@
+suites:
+    Outline:
+        namespace: Outline
+        psr4_prefix: Outline
+        src_path: src/Outline
+        spec_path: tests/Outline

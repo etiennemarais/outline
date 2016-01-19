@@ -1,23 +1,31 @@
 <?php
-namespace Outline\TestGenerator;
+namespace Outline\Test\Generator;
 
 use Flow\JSONPath\JSONPath;
-use Outline\ApiBlueprint\ApiBlueprintContract;
+use Outline\Contracts\ApiBlueprint;
+use Outline\Test\Template\Template;
+use Outline\Transformer\Outline\Transformer;
 use Text_Template;
 
-class TestGenerator
+class Generator
 {
     /**
-     * @var ApiBlueprintContract
+     * @var ApiBlueprint
      */
     private $apiBlueprint;
     private $outputTestsPath;
+    private $transformer;
+
+    public function __construct(Transformer $transformer)
+    {
+        $this->transformer = $transformer;
+    }
 
     /**
-     * @param ApiBlueprintContract $apiBlueprint
+     * @param ApiBlueprint $apiBlueprint
      * @return $this
      */
-    public function with(ApiBlueprintContract $apiBlueprint)
+    public function with(ApiBlueprint $apiBlueprint)
     {
         $this->apiBlueprint = $apiBlueprint;
         return $this;
@@ -37,25 +45,31 @@ class TestGenerator
      * Gets the result and massages the json data into this format to use inside of the templates is easier to work
      * with.
      *
-     * [
-     *    '/code/send' => [
-     *       'title' => 'some title',
-     *           'GET' => [
-     *               200 => [
-     *                   'responseBody' => [
-     *                       // TODO
-     *                   ],
-     *               ],
-     *           ]
-     *       ],
-     *   ]
-     *
      * @param string $name
      */
     public function generateTestsFor($name = 'default')
     {
-        $json = $this->apiBlueprint->getJson();
-        $jsonDataArray = json_decode($json, true);
+        $jsonDataArray = $this->apiBlueprint->getData();
+        dd($jsonDataArray);
+
+        $resourceCollection = $this->transformer->transform($jsonDataArray);
+
+        (new Template)
+            ->with($resourceCollection)
+            ->render();
+
+
+
+
+
+
+        $jsonDataArray = json_decode($jsonDataArray, true);
+
+        // TODO, remove json path and badly written algo
+        // TODO Create a transformer class with configable structure for override ability
+        // TODO Inject that transformer with the json and pass it to a RenderTest class that deals with the templating :)
+        // TODO Update the tests to better test output
+        // TODO Add response data to the test templates
 
         $jsonPath = new JSONPath($jsonDataArray);
 
