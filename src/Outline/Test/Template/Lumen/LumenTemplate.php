@@ -54,11 +54,7 @@ class LumenTemplate extends Template implements TemplateContract
                 'testCases' => $testCases,
             ]);
 
-            file_put_contents(
-                $outputTestsPath . '/' . $testCaseName . '.php',
-                $this->featuresTestClassTemplate->render()
-            );
-
+            $this->saveContentsToFile($outputTestsPath, $testCaseName);
             $this->outputIfNotInTestingMode($testCaseName);
         }
     }
@@ -81,5 +77,23 @@ class LumenTemplate extends Template implements TemplateContract
         if (getenv('APP_ENV') !== 'testing') {
             echo "Written " . $testCaseName . " feature tests.\n\n";
         }
+    }
+
+    /**
+     * @param $outputTestsPath
+     * @param $testCaseName
+     */
+    private function saveContentsToFile($outputTestsPath, $testCaseName)
+    {
+        $parts = explode('/', $outputTestsPath);
+        $dir = '';
+        foreach($parts as $part) {
+            if(!is_dir($dir .= "/$part")) mkdir($dir);
+        }
+
+        file_put_contents(
+            $outputTestsPath . '/' . $testCaseName . '.php',
+            $this->featuresTestClassTemplate->render()
+        );
     }
 }
