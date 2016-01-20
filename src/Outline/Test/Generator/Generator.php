@@ -54,56 +54,7 @@ class Generator
 
         $template = $this->getTemplateClassFromName($name);
         $template->with($resourceCollection)
-            ->render();
-//
-//        // Generate test cases from stub
-//        $testCaseTemplate = new Text_Template(__DIR__ . '/stubs/' . $name . '/TestCase.tpl');
-//
-//        $testCases = '';
-//        foreach ($requests as $endpoint => $data) {
-//            $methodName = str_replace(' ', '_', $data['title']);
-//
-//            // Remove title to grab all the methods available
-//            unset($data['title']);
-//            foreach ($data as $method => $statusCode) {
-//                foreach ($statusCode as $code) {
-//                    $testCaseTemplate->setVar([
-//                        'methodName' => $methodName . '_Returns' . $code,
-//                        'method' => strtolower($method),
-//                        'methodLabel' => title_case($method),
-//                        'statusCode' => $code,
-//                        'endpoint' => $endpoint,
-//                    ]);
-//
-//                    $testCases .= $testCaseTemplate->render() . "\n";
-//                }
-//            }
-//        }
-//
-//        // Generate test class from stub
-//        $testCaseName = 'FeaturesTest';
-//
-//        $featuresTestClassTemplate = new Text_Template(__DIR__ . '/stubs/' . $name . '/FeaturesTestClass.tpl');
-//        $featuresTestClassTemplate->setVar([
-//            'testCaseName' => $testCaseName,
-//            'date' => date('Y-m-d', time()),
-//            'time' => date('H:i:s', time()),
-//            'testCases' => $testCases,
-//        ]);
-//
-//        file_put_contents($this->outputTestsPath . '/' . $testCaseName . '.php', $featuresTestClassTemplate->render());
-//
-//        $this->outputIfNotInTestingMode($testCaseName);
-    }
-
-    /**
-     * @param $testCaseName
-     */
-    private function outputIfNotInTestingMode($testCaseName)
-    {
-        if (getenv('APP_ENV') !== 'testing') {
-            echo "Written " . $testCaseName . " feature tests.\n\n";
-        }
+            ->renderTo($this->outputTestsPath);
     }
 
     /**

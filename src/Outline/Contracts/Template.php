@@ -9,5 +9,8 @@ interface Template
      */
     public function with(ResourceCollection $collection);
 
-    public function render();
+    /**
+     * @param string $outputTestsPath
+     */
+    public function renderTo($outputTestsPath);
 }

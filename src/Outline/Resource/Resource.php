@@ -42,6 +42,11 @@ class Resource implements ResourceContract
         }
     }
 
+    public function getActions()
+    {
+        return $this->actions;
+    }
+
     /**
      * @param array $properties
      */

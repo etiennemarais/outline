@@ -17,10 +17,50 @@ class LumenTemplate extends Template implements TemplateContract
         $this->setFeaturesTestClassTemplate();
     }
 
-    public function render()
+    /**
+     * @param string $outputTestsPath
+     */
+    public function renderTo($outputTestsPath)
     {
-        // Loop over collection
-        // Write the test templates here
+        foreach ($this->getCollection()->getResources() as $resource) {
+            $testCases = '';
+            foreach ($resource->getActions() as $resourceAction) {
+                $method = strtolower($resourceAction['method']);
+                $methodLabel = ucfirst($method);
+                $endpoint = $resourceAction['attributes']['uriTemplate'];
+                $methodName = str_replace(' ', '_', $resourceAction['name']);
+
+                foreach ($resourceAction['examples'] as $example) {
+                    array_map(function($responses) use ($method, $methodLabel, $methodName, $endpoint, &$testCases) {
+                        $testCaseVars = [
+                            'methodName' => $methodName . '_Returns_' . $responses['name'],
+                            'method' => $method,
+                            'methodLabel' => $methodLabel,
+                            'statusCode' => $responses['name'],
+                            'endpoint' => $endpoint,
+                        ];
+
+                        $this->testCaseTemplate->setVar($testCaseVars);
+                        $testCases .= $this->testCaseTemplate->render() . "\n";
+                    }, $example['responses']);
+                }
+            }
+
+            $testCaseName = 'FeaturesTest';
+            $this->featuresTestClassTemplate->setVar([
+                'testCaseName' => $testCaseName,
+                'date' => date('Y-m-d', time()),
+                'time' => date('H:i:s', time()),
+                'testCases' => $testCases,
+            ]);
+
+            file_put_contents(
+                $outputTestsPath . '/' . $testCaseName . '.php',
+                $this->featuresTestClassTemplate->render()
+            );
+
+            $this->outputIfNotInTestingMode($testCaseName);
+        }
     }
 
     private function setTestCaseTemplate()
@@ -31,5 +71,15 @@ class LumenTemplate extends Template implements TemplateContract
     private function setFeaturesTestClassTemplate()
     {
         $this->featuresTestClassTemplate = new Text_Template(__DIR__ . '/stubs/FeaturesTestClass.tpl');
+    }
+
+    /**
+     * @param $testCaseName
+     */
+    private function outputIfNotInTestingMode($testCaseName)
+    {
+        if (getenv('APP_ENV') !== 'testing') {
+            echo "Written " . $testCaseName . " feature tests.\n\n";
+        }
     }
 }
