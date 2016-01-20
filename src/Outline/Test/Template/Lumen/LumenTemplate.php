@@ -22,8 +22,8 @@ class LumenTemplate extends Template implements TemplateContract
      */
     public function renderTo($outputTestsPath)
     {
+        $testCases = '';
         foreach ($this->getCollection()->getResources() as $resource) {
-            $testCases = '';
             foreach ($resource->getActions() as $resourceAction) {
                 $method = strtolower($resourceAction['method']);
                 $methodLabel = ucfirst($method);
@@ -45,18 +45,18 @@ class LumenTemplate extends Template implements TemplateContract
                     }, $example['responses']);
                 }
             }
-
-            $testCaseName = 'FeaturesTest';
-            $this->featuresTestClassTemplate->setVar([
-                'testCaseName' => $testCaseName,
-                'date' => date('Y-m-d', time()),
-                'time' => date('H:i:s', time()),
-                'testCases' => $testCases,
-            ]);
-
-            $this->saveContentsToFile($outputTestsPath, $testCaseName);
-            $this->outputIfNotInTestingMode($testCaseName);
         }
+
+        $testCaseName = 'FeaturesTest';
+        $this->featuresTestClassTemplate->setVar([
+            'testCaseName' => $testCaseName,
+            'date' => date('Y-m-d', time()),
+            'time' => date('H:i:s', time()),
+            'testCases' => $testCases,
+        ]);
+
+        $this->saveContentsToFile($outputTestsPath, $testCaseName);
+        $this->outputIfNotInTestingMode($testCaseName);
     }
 
     private function setTestCaseTemplate()
