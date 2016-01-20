@@ -1,7 +1,8 @@
 <?php
 
 use Outline\ApiBlueprint\ApiBlueprint;
-use Outline\TestGenerator\TestGenerator;
+use Outline\Test\Generator\Generator;
+use Outline\Transformer\Outline\Transformer;
 
 require_once __DIR__ . '/generated_tests/TestCase.php';
 require_once __DIR__ . '/generated_tests/FeaturesTest.php';
@@ -17,7 +18,7 @@ class FixtureTestGeneratorTest extends \PHPUnit_Framework_TestCase
         $apiBlueprint = new ApiBlueprint($drafter, __DIR__ . '/fixture.apib');
 
         // Run the thing
-        (new TestGenerator)
+        (new Generator(new Transformer))
             ->with($apiBlueprint)
             ->outputTo(__DIR__ . '/generated_tests')
             ->generateTestsFor('lumen');
@@ -37,9 +38,9 @@ class FixtureTestGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('FeaturesTest', $reflection->getName());
 
         $expectedMethods = [
-            'testGet_Fetching_credits_available_Returns200',
-            'testGet_Fetching_credits_available_Returns402',
-            'testGet_Fetching_credits_available_Returns401',
+            'testGet_Fetching_credits_available_Returns_200',
+            'testGet_Fetching_credits_available_Returns_402',
+            'testGet_Fetching_credits_available_Returns_401',
         ];
 
         foreach ($expectedMethods as $index => $method) {
