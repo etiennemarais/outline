@@ -19,4 +19,12 @@ class Template
         $this->collection = $collection;
         return $this;
     }
+
+    /**
+     * @return ResourceCollection
+     */
+    protected function getCollection()
+    {
+        return $this->collection;
+    }
 }

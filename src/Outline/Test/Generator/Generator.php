@@ -53,7 +53,6 @@ class Generator
         $resourceCollection = $this->transformer->transform($jsonDataArray);
 
         $template = $this->getTemplateClassFromName($name);
-        dd($template);
         $template->with($resourceCollection)
             ->render();
 //
