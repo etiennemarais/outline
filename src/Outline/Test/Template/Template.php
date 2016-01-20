@@ -2,9 +2,8 @@
 namespace Outline\Test\Template;
 
 use Outline\Contracts\ResourceCollection;
-use Outline\Contracts\Template as TemplateContract;
 
-class Template implements TemplateContract
+class Template
 {
     /**
      * @var ResourceCollection
@@ -19,11 +18,5 @@ class Template implements TemplateContract
     {
         $this->collection = $collection;
         return $this;
-    }
-
-    public function render()
-    {
-        // Loop over collection
-        // Write the test templates here
     }
 }
