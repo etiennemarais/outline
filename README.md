@@ -18,7 +18,7 @@ $drafter = new \DrafterPhp\Drafter(__DIR__ . '/../vendor/bin/drafter');
 $apiBlueprint = new ApiBlueprint($drafter, __DIR__ . '/example.apib');
 
 // Run the thing
-(new TestGenerator)
+(new Generator(new Transformer))
     ->with($apiBlueprint)
     ->outputTo(__DIR__ . '/generated_tests')
     ->generateTestsFor('lumen'); // Entirely only supports laravel style test output
