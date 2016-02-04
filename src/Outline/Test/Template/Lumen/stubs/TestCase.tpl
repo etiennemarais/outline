@@ -1,7 +1,7 @@
 
     public function test{methodLabel}_{methodName}()
     {
-        $this->{method}("{endpoint}", {requestData}{requestHeaders})
-            {seeJsonStructure}
-            ->assertResponseStatus({statusCode});
+        $call = $this->{method}("{endpoint}", {requestData}{requestHeaders});
+        $call->{seeJsonStructure};
+        $call->assertResponseStatus({statusCode});
     }

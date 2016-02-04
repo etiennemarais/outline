@@ -43,7 +43,7 @@ class ResourceAction
 
         array_map(function($responses) use ($actionParams, $request, &$testCases) {
             $seeJsonStructure = Arr::replaceWithArrayStringRepresentation(
-                "->seeJsonStructure(%)",
+                "seeJsonStructure(%)",
                 json_decode($responses['body'], true)
             );
 

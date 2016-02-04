@@ -15,7 +15,7 @@ class Arr extends \Illuminate\Support\Arr
             $keys[] = $key;
 
             if (is_array($value)) {
-                $keys[] = static::getKeyStructure($value);
+                $keys[$key] = static::getKeyStructure($value);
             }
         }
 
