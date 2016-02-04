@@ -58,12 +58,12 @@ class ResourceAction
                 'endpoint' => $actionParams['endpoint'],
                 'seeJsonStructure' => $seeJsonStructure,
                 'requestHeaders' => $requestHeaders,
-                'requestData' => '',
+                'requestData' => $requestData . ", ",
             ];
 
             // Use case where GET test in laravel, lumen don't support request data
-            if ($actionParams['method'] !== 'GET') {
-                $testCaseVars['requestData'] = $requestData . ", ";
+            if ($testCaseVars['method'] === 'get') {
+                $testCaseVars['requestData'] = '';
             }
 
             $this->testCaseTemplate->setVar($testCaseVars);
