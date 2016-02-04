@@ -1,16 +1,21 @@
-FORMAT: 1A
-HOST: http://outline.app/
+version: v1
+url_prefix: /api
 
 # Outline
 
 Outline is a simple package to covert api blueprint format docs into acceptance/feature tests.
 
-# Status Resource [/status]
+# Status [/status]
 
 ## Fetching credits available [GET /status/credits]
 
 Returns the available credits and does the action of stating whether there is action required of
 buying new credits if the threshold is below a certain point.
+
++ Parameters
+
+    + phone_number (string, required) - The client phone number
+    + client_user_id (integer, required) - The client identifier
 
 + Request
 
@@ -44,4 +49,93 @@ buying new credits if the threshold is below a certain point.
         {
             "status": 401,
             "message": "Invalid API Key"
+        }
+
+## Resending a code [POST /code/resend]
+
+Resending a code is an explicit endpoint that deals with resending a verification code and
+deals with retries and responding to failures in sending, errors and network problems.
+
++ Request (application/json)
+
+    + Headers
+
+            X-Auth-Token: <API_KEY>
+
+    + Body
+
+            {
+                "client_user_id": "12345",
+                "phone_number": "27848118111"
+            }
+
+
++ Response 200 (application/json)
+
+        {
+            "status": 200,
+            "message": "Successfully resent verification code",
+            "data": {
+                "verification_status": "awaiting verification",
+                "expires_at": {
+                    "date": "2016-01-05 14:07:11.000000",
+                    "timezone_type": 3,
+                    "timezone": "UTC"
+                }
+            }
+        }
+
++ Request (application/json)
+
+    + Headers
+
+            X-Auth-Token: <API_KEY>
+
+    + Body
+
+            {
+                "phone_number": "27848118111"
+            }
+
++ Response 400 (application/json)
+
+        {
+            "status": 400,
+            "message": "Missing required field (client_user_id)"
+        }
+
++ Request (application/json)
+
+    + Headers
+
+            token: badToken
+
++ Response 401 (application/json)
+
+        {
+            "status": 401,
+            "message": "Invalid API Key"
+        }
+
++ Request (application/json)
+
+    + Headers
+
+            X-Auth-Token: <API_KEY>
+
+    + Body
+
+            {
+                "client_user_id": "12345",
+                "phone_number": "someBadNumber"
+            }
+
++ Response 406 (application/json)
+
+        {
+            "status": 406,
+            "message": "This number is not valid for the <REGION> region.",
+            "data": {
+                "required_format": "<required format for country>"
+            }
         }

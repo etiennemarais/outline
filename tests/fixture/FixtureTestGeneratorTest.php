@@ -41,6 +41,10 @@ class FixtureTestGeneratorTest extends \PHPUnit_Framework_TestCase
             'testGet_Fetching_credits_available_Returns_200',
             'testGet_Fetching_credits_available_Returns_402',
             'testGet_Fetching_credits_available_Returns_401',
+            'testPost_Resending_a_code_Returns_200',
+            'testPost_Resending_a_code_Returns_400',
+            'testPost_Resending_a_code_Returns_401',
+            'testPost_Resending_a_code_Returns_406',
         ];
 
         foreach ($expectedMethods as $index => $method) {
