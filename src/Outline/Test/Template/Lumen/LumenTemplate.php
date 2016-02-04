@@ -33,6 +33,9 @@ class LumenTemplate extends Template implements TemplateContract
                 $methodLabel = ucfirst($method);
                 $endpoint = $resourceAction['attributes']['uriTemplate'];
                 $methodName = str_replace(' ', '_', $resourceAction['name']);
+                $getRequestQueryParams = ($method === 'GET')
+                    ? $resourceAction['parameters']
+                    : [];
 
                 foreach ($resourceAction['examples'] as $example) {
                     $actionParams = [
@@ -40,6 +43,7 @@ class LumenTemplate extends Template implements TemplateContract
                         'methodLabel' => $methodLabel,
                         'methodName' => $methodName,
                         'endpoint' => $endpoint,
+                        'queryParams' => $getRequestQueryParams,
                     ];
 
                     $testCases .= (new ResourceAction($example, $actionParams))

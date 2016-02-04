@@ -21,7 +21,7 @@ buying new credits if the threshold is below a certain point.
 
     + Headers
 
-            X-Auth-Token: <ADMIN_API_KEY>
+            Authorization: Token ApiKey1234
 
 + Response 200 (application/json)
 
@@ -33,6 +33,12 @@ buying new credits if the threshold is below a certain point.
             }
         }
 
++ Request
+
+    + Headers
+
+            Authorization: Token ApiKey1234
+
 + Response 402 (application/json)
 
         {
@@ -43,6 +49,12 @@ buying new credits if the threshold is below a certain point.
                 "min_threshold": 1000
             }
         }
+
++ Request
+
+    + Headers
+
+            Authorization: Token WrongApiKey1234
 
 + Response 401 (application/json)
 
@@ -60,7 +72,7 @@ deals with retries and responding to failures in sending, errors and network pro
 
     + Headers
 
-            X-Auth-Token: <API_KEY>
+            Authorization: Token ApiKey1234
 
     + Body
 
@@ -89,7 +101,7 @@ deals with retries and responding to failures in sending, errors and network pro
 
     + Headers
 
-            X-Auth-Token: <API_KEY>
+            Authorization: Token ApiKey1234
 
     + Body
 
@@ -108,7 +120,7 @@ deals with retries and responding to failures in sending, errors and network pro
 
     + Headers
 
-            token: badToken
+            Authorization: Token WrongApiKey1234
 
 + Response 401 (application/json)
 
@@ -121,7 +133,7 @@ deals with retries and responding to failures in sending, errors and network pro
 
     + Headers
 
-            X-Auth-Token: <API_KEY>
+            Authorization: Token ApiKey1234
 
     + Body
 

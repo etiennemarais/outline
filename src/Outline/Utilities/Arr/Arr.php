@@ -29,11 +29,51 @@ class Arr extends \Illuminate\Support\Arr
      */
     public static function replaceWithArrayStringRepresentation($string, array $array)
     {
-        $arrayString = var_export(Arr::getKeyStructure($array), true);
+        $arrayString = Arr::getKeyStructure($array);
 
-        $arrayString = preg_replace("/(\\d+\\s=>)/i", '', $arrayString);
-        $arrayString = trim(preg_replace('/\s+/', ' ', $arrayString));
+        $arrayString = self::cleanAndStringifyArray($arrayString);
 
         return str_replace("%", $arrayString, $string);
+    }
+
+    /**
+     * @param array $request
+     * @return string
+     */
+    public static function getRequestBody(array $request)
+    {
+        $requestBody = json_decode($request['body'], true);
+
+        if (is_null($requestBody)) {
+            return "[]";
+        }
+
+        $requestBody = self::cleanAndStringifyArray($requestBody);
+
+        return $requestBody;
+    }
+
+    /**
+     * @param array $request
+     * @return string
+     */
+    public static function getRequestHeaders($request)
+    {
+        $requestHeaders = array_pluck($request['headers'], 'value', 'name');
+
+        $requestHeaders = self::cleanAndStringifyArray($requestHeaders);
+
+        return $requestHeaders;
+    }
+
+    /**
+     * @param $arrayString
+     * @return mixed|string
+     */
+    private static function cleanAndStringifyArray($arrayString)
+    {
+        $arrayString = preg_replace("/(\\d+\\s=>)/i", '', var_export($arrayString, true));
+        $arrayString = trim(preg_replace('/\s+/', ' ', $arrayString));
+        return $arrayString;
     }
 }

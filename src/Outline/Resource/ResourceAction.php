@@ -8,34 +8,47 @@ class ResourceAction
 {
     private $originalExampleActions;
     private $testCaseTemplate;
-    private $params;
+    private $actionParams;
 
     /**
      * @param array $example
-     * @param array $params
+     * @param array $actionParams
      */
-    public function __construct(array $example, array $params)
+    public function __construct(array $example, array $actionParams)
     {
         $this->originalExampleActions = $example;
-        $this->params = $params;
+        $this->actionParams = $actionParams;
     }
 
+    /**
+     * @param Text_Template $testCaseTemplate
+     * @return ResourceAction
+     */
     public function withTestCaseTemplate(Text_Template $testCaseTemplate)
     {
         $this->testCaseTemplate = $testCaseTemplate;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getTestCases()
     {
         $testCases = '';
-        $actionParams = $this->params;
+        $actionParams = $this->actionParams;
 
-        array_map(function($responses) use ($actionParams, &$testCases) {
+        /* Asuming that each response has only one request */
+        $request = $this->originalExampleActions['requests'][0];
+
+        array_map(function($responses) use ($actionParams, $request, &$testCases) {
             $seeJsonStructure = Arr::replaceWithArrayStringRepresentation(
                 "->seeJsonStructure(%)",
                 json_decode($responses['body'], true)
             );
+
+            $requestData = Arr::getRequestBody($request);
+            $requestHeaders = Arr::getRequestHeaders($request);
 
             $testCaseVars = [
                 'methodName' => $actionParams['methodName'] . '_Returns_' . $responses['name'],
@@ -44,6 +57,8 @@ class ResourceAction
                 'statusCode' => $responses['name'],
                 'endpoint' => $actionParams['endpoint'],
                 'seeJsonStructure' => $seeJsonStructure,
+                'requestData' => $requestData,
+                'requestHeaders' => $requestHeaders,
             ];
 
             $this->testCaseTemplate->setVar($testCaseVars);
