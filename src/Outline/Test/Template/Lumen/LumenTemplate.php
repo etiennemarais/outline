@@ -3,6 +3,9 @@ namespace Outline\Test\Template\Lumen;
 
 use Outline\Test\Template\Template;
 use Outline\Contracts\Template as TemplateContract;
+use Outline\Utilities\Arr\Arr;
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
 use Text_Template;
 
 class LumenTemplate extends Template implements TemplateContract
@@ -32,12 +35,18 @@ class LumenTemplate extends Template implements TemplateContract
 
                 foreach ($resourceAction['examples'] as $example) {
                     array_map(function($responses) use ($method, $methodLabel, $methodName, $endpoint, &$testCases) {
+                        $seeJsonStructure = Arr::replaceWithArrayStringRepresentation(
+                            "->seeJsonStructure(%)",
+                            json_decode($responses['body'], true)
+                        );
+
                         $testCaseVars = [
                             'methodName' => $methodName . '_Returns_' . $responses['name'],
                             'method' => $method,
                             'methodLabel' => $methodLabel,
                             'statusCode' => $responses['name'],
                             'endpoint' => $endpoint,
+                            'seeJsonStructure' => $seeJsonStructure,
                         ];
 
                         $this->testCaseTemplate->setVar($testCaseVars);
