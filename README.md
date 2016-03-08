@@ -1,4 +1,4 @@
-# outline
+# Outline
 Parse and generate API Blueprint markdown into Feature/Acceptance tests
 
 ## NOTE
