@@ -1,6 +1,8 @@
 # Outline
 Parse and generate API Blueprint markdown into Feature/Acceptance tests
 
+[![Build Status](https://travis-ci.org/etiennemarais/outline.svg?branch=master)](https://travis-ci.org/etiennemarais/outline)
+
 ## NOTE
 
 This project is still very opinionated about how it parses api blueprint documents and is built entirely for a single use case
